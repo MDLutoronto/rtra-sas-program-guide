@@ -1,8 +1,14 @@
 ---
 title: "RTRA SAS Program Guide"
 layout: "home"
-description: ""
+description: "This guide helps users get started with writing a SAS program/code for RTRA purposes."
 permalink: "/"  #! Remove this if not the homepage
+staff:
+ - name: Nadia Muhe
+   link: https://library.utoronto.ca/staff/nadia-muhe
+maintainer:
+ - name: Nadia Muhe
+   link: https://library.utoronto.ca/staff/nadia-muhe
 ---
 
 # RTRA SAS Program Guide
@@ -15,11 +21,11 @@ As described on the StatCan [webpage](https://www.statcan.gc.ca/en/microdata/rtr
 
  
 
-### RTRA APPLICATION
+## RTRA APPLICATION
 
 To begin your application process, [follow the instructions](https://www.statcan.gc.ca/en/microdata/rtra/application). It takes one week to create an account. Once approved, you will receive one login for the [EFT service](https://eft-tef.statcan.gc.ca/#/) to submit your SAS program online and to download survey resources that will help you in writing your SAS program.
 
-### RESOURCES
+## RESOURCES
 
 The following resources are useful to begin writing your SAS program.
 
@@ -35,11 +41,11 @@ The following resources are useful to begin writing your SAS program.
 	+ List of [RTRA procedures](https://www.statcan.gc.ca/en/microdata/rtra/training/programming)
 	+ RTRA [system limitations](https://www.statcan.gc.ca/en/microdata/rtra/training/limitation)
 
-### WRITING THE SAS PROGRAM
+## WRITING THE SAS PROGRAM
 
 You have three options to write the SAS program. (1\) You can write a SAS program from scratch. (2\) You can modify the survey specific sample SAS code provided on the EFT (usually called *SampleProgramEng.sas* found under the *Example Program* folder of the survey directory). Not all surveys provide a sample SAS code. (3\) Or use the Statistics Canada [RTRA SAS assistant](https://www.statcan.gc.ca/rtra-adtr/eng/sas).
 
-#### OVERALL STEPS
+### OVERALL STEPS
 
 1. Library step to define a short term to represent the data directory (libname)
 	* If you have a libname line in your SAS code delete it. If you don’t, ignore this step.
@@ -55,7 +61,7 @@ Note: The data step is necessary even if you are not modifying the original data
 
  
 
-#### BASIC CODE STRUCTURE
+### BASIC CODE STRUCTURE
 
 The RTRA SAS code consists of 1\) the data step and 2\) the procedure macro step. The data step is used to process data by keeping/dropping observations and/or variables, creating new variables etc. The procedure macro step are used to compute means, frequencies, percentiles, percent distributions, proportions, ratios and shares.
 
@@ -71,29 +77,25 @@ The list of procedure macro steps are:
 
  
 
-#### DATA STEP
+### DATA STEP
 
 The SAS code for the data step has the following structure below. Each line (statement) ends with a semi\-colon. The final statement run is used to execute previous lines of SAS statements. The asterisks are meant to be replaced with the appropriate parameter names.
 
 ```
-
 data ******;
 set RTRAData.***;
 ****** ******;
 run;
-
 ```
  
 
 Below are the definitions of the parameters to be replaced.
 
 ```
-
 data ******;       -> name of the processed data set. Use one term with no spaces.
 set RTRAData.***;  -> add the survey master dataset name found in the Parameters webpage (eg. RTRAData.CCHS2015)
 ****** ******;     -> add statements to process data
 run;
-
 ```
  
 
@@ -101,42 +103,37 @@ DATA STEP \- ADDITIONAL STATEMENTS
 
 Additional statements in the data step are optional and only to be included if you want to process the master dataset before running a procedure. These statements are included between the set line and the run line. The lines to be added depend on how you want to modify the original survey dataset. A few examples of additional statements that can be included in the data step can be found below.
 
-To drop observations (i.e., subset) use the if statement
+To drop observations (i.e., subset) use the if statement:
 
-##### Eg. Drop all values of gender with a value of 1
+> Eg. Drop all values of gender with a value of 1
 
 ```
-
      if gender=1 then delete;
 ```
 
-##### Eg 2\. To delete cases where the variable education has missing values \[dot\=missing for numeric]
+> Eg 2\. To delete cases where the variable education has missing values \[dot\=missing for numeric]
 
 ```
-
      if education = . then delete;
 ```
-To create a new variable which results in a new column
+To create a new variable which results in a new column:
 
-##### Eg. Create a new variable days that converts the variable year from the original data set
+> Eg. Create a new variable days that converts the variable year from the original data set
 
 ```
-
      days = 365.25*year;
 ```
 
-##### Eg 2\. To convert a character variable age with a length of 3 digits into a numeric variable age2
+> Eg 2\. To convert a character variable age with a length of 3 digits into a numeric variable age2
 
 ```
-
      age2 = input(age, 3);
 ```
-To recode a variable
+To recode a variable:
 
-##### Eg. Say a variable maritalstatus has values 5 that we want to recode (regroup) as 4
+> Eg. Say a variable maritalstatus has values 5 that we want to recode (regroup) as 4
 
 ```
-
      if maritalstatus = 5 then maritalstatus = 4 ;
 ```
  
@@ -147,18 +144,16 @@ Some numeric measures are stored as character variables. To run procedures such 
 
  
 
-#### MACRO STEP \- FREQUENCY \& MEAN PROCEDURE
+### MACRO STEP \- FREQUENCY & MEAN PROCEDURE
 
 The SAS code for the frequency and mean macro procedures hav the following structure below. Again, the asterisks are meant to be replaced with the appropriate names. The definiton of arguments follows after the SAS code for each procedure. The SAS code/list of arguments for other procedures can be found here. Note that not all arguments are always necessary when running a procedure. For example, the ClassVarList variable may not be necessary depending on the output desired and the procedure used. When this is the case, simply omit the ClassListVar argument (the entire line) from the SAS code.
 
 ```
-
 %RTRAFreq(
 InputDataset =******,
 OutputName=******,
 ClassVarlist=******,
 UserWeight=****** );
-
 ```
  
 
@@ -172,14 +167,12 @@ UserWeight=****** );
  
 
 ```
-
 %RTRAMean(
 InputDataset =******,
 OutputName=******,
 ClassVarlist=******,
 AnalysisVarList=******,
 UserWeight=****** );
-
 ```
  
 
@@ -193,42 +186,36 @@ UserWeight=****** );
 
  
 
-#### EXAMPLE OF FINAL SAS CODE
+### EXAMPLE OF FINAL SAS CODE
 
 Below is an example of an RTRA SAS code.
 
 ```
-
 data ******;
 set RTRAData.***;
 ****** ******;
 run;
-
 ```
 
 ```
-
 %RTRAFreq(
 InputDataset =******,
 OutputName=******,
 ClassVarlist=******,
 UserWeight=****** );
-
 ```
 
 ```
-
 %RTRAMean(
 InputDataset =******,
 OutputName=******,
 ClassVarlist=******,
 AnalysisVarList=******,
 UserWeight=****** );
-
 ```
  
 
-### MACROS
+## MACROS
 
 **RTRAFreq** gives the weighted count of observations at each level of the *Class* variable(s). This procedure is appropriate for discrete variables because a *Class* variable cannot have more than 500 distinct values – as per the RTRA system limitation. The first row of the output table is the total weighted count without breaking it down by the *Class* variable. With every additional variables, a new variable column is added and a count for each combination of levels is given. The image below shows the output tables from the frequency procedure using one *Class* variable (left) and two *Class* variables (right).
 
@@ -250,7 +237,7 @@ The image below shows the output tables from the Mean procedure (left) and the P
 
 ![]({{ '/assets/images/RTRA_SAS_3.png' | relative_url }})
 
-**RTRARatio** gives the ratio of the totals of two continuous variables (*NumeratorVar* and*DenominatorVar*) at each level of the *ByVar* variable. When a *Class* variable is added, the ratio is given for each combination of the *Class* and *ByVar* variables. The weighted count is also provided.
+**RTRARatio** gives the ratio of the totals of two continuous variables (*NumeratorVar* and *DenominatorVar*) at each level of the *ByVar* variable. When a *Class* variable is added, the ratio is given for each combination of the *Class* and *ByVar* variables. The weighted count is also provided.
 
 **RTRAShare** gives a percentage which is the subtotal (sum) of the *Share* variable at each level of the *ByVar* variable divided by the grand total of the *Share* variable: the share of the *Share* variable at each level of the *ByVar* variable. When a *Class* variable is added, the shares are calculated at each level of the *Class* variable. The shares add up to 100% within each level of the *Class* variable. The weighted count is also provided.
 
@@ -258,7 +245,7 @@ Higher\-order statistics can be calculated using modified versions of these proc
 
  
 
-### SUBMIT THE SAS PROGRAM
+## SUBMIT THE SAS PROGRAM
 
 Once you have completed your SAS program, you want to submit it!
 
@@ -267,7 +254,7 @@ Once you have completed your SAS program, you want to submit it!
 
  
 
-### RTRA OUTPUT
+## RTRA OUTPUT
 
 It takes a few minutes to run the code. You will likely receive an email when the output is ready.
 
@@ -289,7 +276,7 @@ You will find rows in the output tables with blank cell(s). The statsitics in a 
 
  
 
-#### ERROR
+### ERROR
 
 It is not uncommon to get errors when you first submit your program. Use the checklist below to check and debug your SAS program.
 
@@ -309,11 +296,13 @@ Tips/Checklist:
 
  
 
-### QUESTIONS
+## QUESTIONS
 
 Contact us if you have any questions!  
-Drop in at the Map \& Data Library on weekdays 11 am to 5 pm.  
+Drop in at the Map & Data Library on weekdays 11 am to 5 pm.  
 Email: [mdl.library@utoronto.ca](mailto:mdl.library@utoronto.ca)  
 Phone: 416\-978\-5589
 
-Technique: [Extracting data](/technique/extracting-data) \| Tools: [SAS](/tools/sas-0) \| Data Format: [Statistics](/data-format/statistics)**Date Created:** 2020\-06\-02**Updated:** 2023\-11\-02
+Technique: [Extracting data](/technique/extracting-data) \| Tools: [SAS](/tools/sas-0) \| Data Format: [Statistics](/data-format/statistics)
+
+**Date Created:** 2020\-06\-02 **Updated:** 2023\-11\-02
