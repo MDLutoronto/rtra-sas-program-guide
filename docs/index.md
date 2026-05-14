@@ -9,6 +9,7 @@ staff:
 maintainer:
  - name: Nadia Muhe
    link: https://library.utoronto.ca/staff/nadia-muhe
+created_date: 2020-06-02
 ---
 
 # RTRA SAS Program Guide
@@ -17,7 +18,7 @@ This guide helps users get started with writing a SAS program/code for RTRA purp
 
  
 
-As described on the StatCan [webpage](https://www.statcan.gc.ca/en/microdata/rtra), "the RTRA system is an on\-line remote access facility allowing users to run SAS programs, in real\-time, against microdata sets located in a central and secure location". Statistics Canada provides multiple avenues to access data and statistics: StatCAN census profile tables, CANSIM, RTRA and RDC. RTRA is appropriate for researchers looking for aggregate data that is not available through PUMFs (Public Use Microdata Files) but have too little time or too small a project to request access to the RDC.
+As described on the StatCan [webpage](https://www.statcan.gc.ca/en/microdata/rtra), "the RTRA system is an on-line remote access facility allowing users to run SAS programs, in real-time, against microdata sets located in a central and secure location". Statistics Canada provides multiple avenues to access data and statistics: StatCAN census profile tables, CANSIM, RTRA and RDC. RTRA is appropriate for researchers looking for aggregate data that is not available through PUMFs (Public Use Microdata Files) but have too little time or too small a project to request access to the RDC.
 
  
 
@@ -43,7 +44,7 @@ The following resources are useful to begin writing your SAS program.
 
 ## WRITING THE SAS PROGRAM
 
-You have three options to write the SAS program. (1\) You can write a SAS program from scratch. (2\) You can modify the survey specific sample SAS code provided on the EFT (usually called *SampleProgramEng.sas* found under the *Example Program* folder of the survey directory). Not all surveys provide a sample SAS code. (3\) Or use the Statistics Canada [RTRA SAS assistant](https://www.statcan.gc.ca/rtra-adtr/eng/sas).
+You have three options to write the SAS program. (1) You can write a SAS program from scratch. (2) You can modify the survey specific sample SAS code provided on the EFT (usually called *SampleProgramEng.sas* found under the *Example Program* folder of the survey directory). Not all surveys provide a sample SAS code. (3) Or use the Statistics Canada [RTRA SAS assistant](https://www.statcan.gc.ca/rtra-adtr/eng/sas).
 
 ### OVERALL STEPS
 
@@ -55,7 +56,7 @@ You have three options to write the SAS program. (1\) You can write a SAS progra
 3. Macro step to compute statistics
 4. Name the SAS program file starting with the TAG name specific to the survey followed by an underscore
 	* The TAG name can be found on the RTRA Parameters [webpage](https://www.statcan.gc.ca/en/microdata/rtra/data)
-	* Eg. CCHS2015\_myname
+	* Eg. CCHS2015_myname
 
 Note: The data step is necessary even if you are not modifying the original dataset because you cannot refer to the *RTRAData* library in the macro step.
 
@@ -63,7 +64,7 @@ Note: The data step is necessary even if you are not modifying the original data
 
 ### BASIC CODE STRUCTURE
 
-The RTRA SAS code consists of 1\) the data step and 2\) the procedure macro step. The data step is used to process data by keeping/dropping observations and/or variables, creating new variables etc. The procedure macro step are used to compute means, frequencies, percentiles, percent distributions, proportions, ratios and shares.
+The RTRA SAS code consists of 1) the data step and 2) the procedure macro step. The data step is used to process data by keeping/dropping observations and/or variables, creating new variables etc. The procedure macro step are used to compute means, frequencies, percentiles, percent distributions, proportions, ratios and shares.
 
 The list of procedure macro steps are:
 
@@ -79,7 +80,7 @@ The list of procedure macro steps are:
 
 ### DATA STEP
 
-The SAS code for the data step has the following structure below. Each line (statement) ends with a semi\-colon. The final statement run is used to execute previous lines of SAS statements. The asterisks are meant to be replaced with the appropriate parameter names.
+The SAS code for the data step has the following structure below. Each line (statement) ends with a semi-colon. The final statement run is used to execute previous lines of SAS statements. The asterisks are meant to be replaced with the appropriate parameter names.
 
 ```
 data ******;
@@ -99,7 +100,7 @@ run;
 ```
  
 
-DATA STEP \- ADDITIONAL STATEMENTS
+DATA STEP - ADDITIONAL STATEMENTS
 
 Additional statements in the data step are optional and only to be included if you want to process the master dataset before running a procedure. These statements are included between the set line and the run line. The lines to be added depend on how you want to modify the original survey dataset. A few examples of additional statements that can be included in the data step can be found below.
 
@@ -111,7 +112,7 @@ To drop observations (i.e., subset) use the if statement:
      if gender=1 then delete;
 ```
 
-> Eg 2\. To delete cases where the variable education has missing values \[dot\=missing for numeric]
+> Eg 2. To delete cases where the variable education has missing values [dot=missing for numeric]
 
 ```
      if education = . then delete;
@@ -124,7 +125,7 @@ To create a new variable which results in a new column:
      days = 365.25*year;
 ```
 
-> Eg 2\. To convert a character variable age with a length of 3 digits into a numeric variable age2
+> Eg 2. To convert a character variable age with a length of 3 digits into a numeric variable age2
 
 ```
      age2 = input(age, 3);
@@ -144,7 +145,7 @@ Some numeric measures are stored as character variables. To run procedures such 
 
  
 
-### MACRO STEP \- FREQUENCY & MEAN PROCEDURE
+### MACRO STEP - FREQUENCY & MEAN PROCEDURE
 
 The SAS code for the frequency and mean macro procedures hav the following structure below. Again, the asterisks are meant to be replaced with the appropriate names. The definiton of arguments follows after the SAS code for each procedure. The SAS code/list of arguments for other procedures can be found here. Note that not all arguments are always necessary when running a procedure. For example, the ClassVarList variable may not be necessary depending on the output desired and the procedure used. When this is the case, simply omit the ClassListVar argument (the entire line) from the SAS code.
 
@@ -231,7 +232,7 @@ The image below shows the output tables from the PercentDist procedure (left) an
 
 **RTRAMean** provides the mean or what is commonly known as the average of the *AnalysisVarList* variable at each level of the *Class* variable.  If more than one *Class* variable is specified, it gives the mean of the *AnalysisVarList* variable at each combination of levels of the *Class* variables. The weighted count is also provided.
 
-**RTRAPercentile** gives the value of the *AnalysisVar* variable below which a certain percent of observations fall (i.e., the Nth percentile of the *AnalysisVar* variable) for each level of the *Class* variable.  You cannot run this procedure without a *Class* variable. You can choose 3 percentiles to calcualte from the following list: 1, 5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95, 99\. The weighted count is also provided.
+**RTRAPercentile** gives the value of the *AnalysisVar* variable below which a certain percent of observations fall (i.e., the Nth percentile of the *AnalysisVar* variable) for each level of the *Class* variable.  You cannot run this procedure without a *Class* variable. You can choose 3 percentiles to calcualte from the following list: 1, 5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95, 99. The weighted count is also provided.
 
 The image below shows the output tables from the Mean procedure (left) and the Percentile procedure (right).
 
@@ -241,7 +242,7 @@ The image below shows the output tables from the Mean procedure (left) and the P
 
 **RTRAShare** gives a percentage which is the subtotal (sum) of the *Share* variable at each level of the *ByVar* variable divided by the grand total of the *Share* variable: the share of the *Share* variable at each level of the *ByVar* variable. When a *Class* variable is added, the shares are calculated at each level of the *Class* variable. The shares add up to 100% within each level of the *Class* variable. The weighted count is also provided.
 
-Higher\-order statistics can be calculated using modified versions of these procedures. You can learn more about such procedures [here](https://www.statcan.gc.ca/en/microdata/rtra/training/programming).
+Higher-order statistics can be calculated using modified versions of these procedures. You can learn more about such procedures [here](https://www.statcan.gc.ca/en/microdata/rtra/training/programming).
 
  
 
@@ -284,12 +285,12 @@ Tips/Checklist:
 
 * Check the RTRA log file if the RTRA process was unsuccesful at any stage
 * Check the SAS log file for error messages
-* Use the survey tag name at the beginning of the SAS program file name (eg. CCHS2015\_zzzz)
+* Use the survey tag name at the beginning of the SAS program file name (eg. CCHS2015_zzzz)
 * The library name is always *RTRAData*
 * Do not include a libname line
 * Use the dataset name in the data step following the *RTRAData* library name
-* Don’t forget the semi\-colon after every line in the data step!
-* Don’t forget the semi\-colon at the end of the macro!
+* Don’t forget the semi-colon after every line in the data step!
+* Don’t forget the semi-colon at the end of the macro!
 * Don’t forget *run;* at the end of the data step
 * Check the spelling of variables, procedure(s), data set name
 * Check the RTRA [system limitations](https://www.statcan.gc.ca/en/microdata/rtra/training/limitation)
@@ -301,8 +302,6 @@ Tips/Checklist:
 Contact us if you have any questions!  
 Drop in at the Map & Data Library on weekdays 11 am to 5 pm.  
 Email: [mdl.library@utoronto.ca](mailto:mdl.library@utoronto.ca)  
-Phone: 416\-978\-5589
+Phone: 416-978-5589
 
-**Technique:** [Extracting data](https://mdlutoronto.github.io/tutorials-search/?technique=Extracting+data) \| **Tools:** [SAS](https://mdlutoronto.github.io/tutorials-search/?tool=SAS) \| **Data Format:** [Statistics](https://mdlutoronto.github.io/tutorials-search/?dataFormat=Statistics)
-
-**Date Created:** 2020\-06\-02 **Updated:** 2023\-11\-02
+Technique: [Extracting data](https://mdlutoronto.github.io/tutorials-search/?technique=Extracting+data) | Tools: [SAS](https://mdlutoronto.github.io/tutorials-search/?tool=SAS) | Data Format: [Statistics](https://mdlutoronto.github.io/tutorials-search/?dataFormat=Statistics)
